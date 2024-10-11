@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 
 const Events = () => {
-    const [events, setEvents] = useState([]);
-    const [newEvent, setNewEvent] = useState({ title: '', description: '', start_time: '', end_time: '' });
-    const [editEvent, setEditEvent] = useState(null);
+    let [events, setEvents] = useState([]);
+    let [newEvent, setNewEvent] = useState({ title: '', description: '', start_time: '', end_time: '' });
+    let [editEvent, setEditEvent] = useState(null);
 
     // Fetch events
     useEffect(() => {
-        fetch('http://localhost:8000/events/api/')
+        fetch('http://localhost:8000/events/api/events/')
             .then(response => response.json())
-            .then(data => setEvents(data))
+            .then(data => {console.log(data);
+                 setEvents(Object.values(data));
+                console.log(events)})
             .catch(error => console.error('Error fetching events:', error));
     }, []);
 
@@ -21,7 +23,7 @@ const Events = () => {
     // Create a new event
     const handleCreate = (e) => {
         e.preventDefault();
-        fetch('http://localhost:8000/events/api/', {
+        fetch('http://localhost:8000/events/api/events/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -30,15 +32,17 @@ const Events = () => {
         })
             .then(response => response.json())
             .then(data => {
-                setEvents([...events, data]);
+                
+                setEvents([...events, data]); // correction
                 setNewEvent({ title: '', description: '', start_time: '', end_time: '' }); // Clear form
             })
             .catch(error => console.error('Error creating event:', error));
     };
 
     // Delete an event
-    const handleDelete = (id) => {
-        fetch(`http://localhost:8000/events/api/${id}/`, {
+    const handleDelete = (id) => {fetch('http://localhost:8000/events/api/events/')
+    .then(response => response.json())
+        fetch(`http://localhost:8000/events/api/events/${id}/`, {
             method: 'DELETE',
         })
             .then(() => {
@@ -54,7 +58,7 @@ const Events = () => {
 
     // Edit an event
     const handleEdit = (id) => {
-        fetch(`http://localhost:8000/events/api/${id}/`, {
+        fetch(`http://localhost:8000/events/api/events/${id}/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -72,10 +76,12 @@ const Events = () => {
     return (
         <div>
             <h1>Events</h1>
-
+            <p>{Array.isArray(events) }</p>
+            <p>{ events.length }</p>
+            
             {/* Create event form */}
             <form onSubmit={handleCreate}>
-                <input
+                title: <input
                     type="text"
                     name="title"
                     placeholder="Event Title"
@@ -83,14 +89,14 @@ const Events = () => {
                     onChange={handleChange}
                     required
                 />
-                <textarea
+                description : <textarea
                     name="description"
                     placeholder="Event Description"
                     value={newEvent.description}
                     onChange={handleChange}
                     required
                 />
-                <input
+                start time: <input
                     type="datetime-local"
                     name="start_time"
                     placeholder="Start Time"
@@ -98,7 +104,7 @@ const Events = () => {
                     onChange={handleChange}
                     required
                 />
-                <input
+                end time: <input
                     type="datetime-local"
                     name="end_time"
                     placeholder="End Time"
@@ -107,54 +113,64 @@ const Events = () => {
                     required
                 />
                 <button type="submit">Create Event</button>
+                
             </form>
+            
+            
+            { events.length > 0 ?(<ul>
+                
+                Event List
 
-            <ul>
-                Event List 
                 {events.map(event => (
                     <li key={event.id}>
                         {editEvent && editEvent.id === event.id ? (
-                            // Edit event form
-                            <form onSubmit={() => handleEdit(event.id)}>
-                                <input
-                                    type="text"
-                                    name="title"
-                                    value={editEvent.title}
-                                    onChange={handleEditChange}
-                                />
-                                <textarea
-                                    name="description"
-                                    value={editEvent.description}
-                                    onChange={handleEditChange}
-                                />
-                                <input
-                                    type="datetime-local"
-                                    name="start_time"
-                                    value={editEvent.start_time}
-                                    onChange={handleEditChange}
-                                    required
-                                />
-                                <input
-                                    type="datetime-local"
-                                    name="end_time"
-                                    value={editEvent.end_time}
-                                    onChange={handleEditChange}
-                                    required
-                                />
-                                <button type="submit">Save</button>
-                            </form>
-                        ) : (
-                            <>
-                                <a href={`/events/${event.id}`}>{event.title}</a>
-                                <p>Start Time: {event.start_time}</p>
-                                <p>End Time: {event.end_time}</p>
-                                <button onClick={() => setEditEvent(event)}>Edit</button>
-                                <button onClick={() => handleDelete(event.id)}>Delete</button>
-                            </>
-                        )}
+                                // Edit form for the selected event
+                                <form onSubmit={() => handleEdit(event.id)}>
+                                    title: <input
+                                        type="text"
+                                        name="title"
+                                        value={editEvent.title}
+                                        onChange={handleEditChange}
+                                        required
+                                    />
+                                    description : <textarea
+                                        name="description"
+                                        value={editEvent.description}
+                                        onChange={handleEditChange}
+                                        required
+                                    />
+                                    start time: <input
+                                        type="datetime-local"
+                                        name="start_time"
+                                        value={editEvent.start_time}
+                                        onChange={handleEditChange}
+                                        required
+                                    />
+                                    end time: <input
+                                        type="datetime-local"
+                                        name="end_time"
+                                        value={editEvent.end_time}
+                                        onChange={handleEditChange}
+                                        required
+                                    />
+                                    <button type="submit">Save</button>
+                                    <button type="button" onClick={() => setEditEvent(null)}>Cancel</button>
+                                </form>
+                            ) : (
+                        
+                        <>
+                        <a href={`/events/${event.id}`}>{event.title}</a>
+                        <p>Start Time: {event.start_time}</p>
+                        <p>End Time: {event.end_time}</p>
+                        <p>Description : {event.description}</p>
+                        <button onClick={() => setEditEvent(event)}>Edit</button>
+                        <button onClick={() => handleDelete(event.id)}>Delete</button>  
+                        </>)}
                     </li>
-                ))}
-            </ul>
+                                )
+                        )
+                }
+            </ul>) : (<h1> No Events</h1>) }
         </div>
     );
 };

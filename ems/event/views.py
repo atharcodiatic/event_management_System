@@ -14,5 +14,7 @@ class EventViewSet(viewsets.ModelViewSet):
     Update Event:  PUT or PATCH request to /api/events/<id>/.
     Delete Event: Use the DELETE request to /api/events/<id>/.
     '''
+    breakpoint
     queryset = Event.objects.all()
+    print(queryset)
     serializer_class = EventSerializer

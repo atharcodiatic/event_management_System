@@ -26,13 +26,13 @@ services:
 
     ports:
       - '8000:8000'
+    stdin_open : true
+    tty: true
+    
     environment:
     - DEBUG=True      # Enable debug mode for Django hot-reloading
 
     volumes:
-      - ./ems:/app/backend  # Corrected path to match your directory structure (bind mount)
-      - db_data:/app/ems/db.sqlite3 # volume mount , ls -> backend(contains all files ) , ems(db.sqlite3)
-      
       - ./ems:/app/backend  # Corrected path to match your directory structure (bind mount)
       - db_data:/app/ems/db.sqlite3 # volume mount , ls -> backend(contains all files ) , ems(db.sqlite3)
       
