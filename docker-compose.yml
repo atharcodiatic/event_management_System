@@ -1,0 +1,41 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+
+    ports:
+      - '3000:3000'
+
+    volumes:
+      - ./frontend:/app/frontend
+      # the name volume left side (frontend)  must be similar to our directory name 
+      # The bind mount should map the local directory to the correct working directory inside the container.
+      # current working dir inside the container is workdir we set in Dockerfile 
+    depends_on:
+      - backend
+
+  backend: 
+    build: 
+      context: ./ems
+      dockerfile: Dockerfile
+    command: bash -c " python manage.py makemigrations &&
+                    python manage.py migrate &&
+                    python manage.py runserver 0.0.0.0:8000"
+
+    ports:
+      - '8000:8000'
+    environment:
+    - DEBUG=True      # Enable debug mode for Django hot-reloading
+
+    volumes:
+      - ./ems:/app/backend  # Corrected path to match your directory structure (bind mount)
+      - db_data:/app/ems/db.sqlite3 # volume mount , ls -> backend(contains all files ) , ems(db.sqlite3)
+      
+      - ./ems:/app/backend  # Corrected path to match your directory structure (bind mount)
+      - db_data:/app/ems/db.sqlite3 # volume mount , ls -> backend(contains all files ) , ems(db.sqlite3)
+      
+      # Named volumes (like db_data in your configuration) are not tied to a specific folder on the host. They are stored and managed by Docker, typically in /var/lib/docker/volumes/ on Linux systems. 
+volumes:
+  db_data:
