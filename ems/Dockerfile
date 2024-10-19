@@ -14,7 +14,7 @@ COPY requirements.txt /app/backend/
 
 # Build psycopg2-binary from source -- add required required dependencies
 RUN pip install --upgrade pip
-
+RUN pip install watchdog
 RUN  pip install --no-cache-dir -r requirements.txt 
 #Using the --no-cache Option: If you run Docker with the --no-cache flag, it will force a fresh build of every layer, including npm install, bypassing the cache.
 

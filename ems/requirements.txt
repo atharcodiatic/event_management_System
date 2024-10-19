@@ -1,7 +1,8 @@
 amqp==5.2.0
 asgiref==3.8.1
 async-timeout==4.0.3
-backports.zoneinfo==0.2.1
+# backports.zoneinfo==0.2.1
+backports.zoneinfo;python_version<"3.9"
 billiard==4.2.0
 celery==5.4.0
 channels==4.1.0
@@ -24,3 +25,5 @@ typing-extensions==4.12.2
 tzdata==2024.1
 vine==5.1.0
 wcwidth==0.2.13
+daphne
+

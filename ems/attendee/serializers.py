@@ -5,7 +5,8 @@ from .models import UserActivity, Attendee
 class AttendeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendee
-        fields = '__all__'
+        
+        exclude = 'user'
 
 
 class UserActivitySerializer(serializers.ModelSerializer):

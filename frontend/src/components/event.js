@@ -9,9 +9,9 @@ const Events = () => {
     useEffect(() => {
         fetch('http://localhost:8000/events/api/events/')
             .then(response => response.json())
-            .then(data => {console.log(data);
+            .then(data => {;
                  setEvents(Object.values(data));
-                console.log(events)})
+                })
             .catch(error => console.error('Error fetching events:', error));
     }, []);
 

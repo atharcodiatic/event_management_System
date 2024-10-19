@@ -4,6 +4,8 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Event
 from .serializers import EventSerializer
+import logging
+logger = logging.getLogger(__name__)
 
 class EventViewSet(viewsets.ModelViewSet):
     '''
@@ -14,7 +16,8 @@ class EventViewSet(viewsets.ModelViewSet):
     Update Event:  PUT or PATCH request to /api/events/<id>/.
     Delete Event: Use the DELETE request to /api/events/<id>/.
     '''
-    breakpoint
     queryset = Event.objects.all()
-    print(queryset)
+
+    # import pdb 
+    # pdb.set_trace()
     serializer_class = EventSerializer

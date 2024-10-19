@@ -7,14 +7,6 @@ For more information on this file, see
 https://docs.djangoproject.com/en/4.2/howto/deployment/asgi/
 """
 
-import os
-
-from django.core.asgi import get_asgi_application
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ems.settings')
-
-application = get_asgi_application()
-
 # asgi.py
 
 import os
@@ -22,7 +14,8 @@ from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 from channels.security.websocket import AllowedHostsOriginValidator
-from ems import routing  # Import your routing
+from notification import routing  # Import your routing
+import notification
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ems.settings')
 
@@ -31,7 +24,7 @@ application = ProtocolTypeRouter({
     "websocket": AllowedHostsOriginValidator(
         AuthMiddlewareStack(
             URLRouter(
-                routing.websocket_urlpatterns
+                notification.routing.websocket_urlpatterns
             )
         )
     ),

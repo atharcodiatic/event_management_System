@@ -17,7 +17,7 @@ const RSVP = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Handle RSVP submission
-        fetch('http://localhost:8000/api/rsvp/', {
+        fetch('http://localhost:8000/attendees/api/attendees/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(rsvpData)

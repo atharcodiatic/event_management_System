@@ -21,13 +21,16 @@ services:
       context: ./ems
       dockerfile: Dockerfile
     command: bash -c " python manage.py makemigrations &&
-                    python manage.py migrate &&
+                    python manage.py migrate && 
                     python manage.py runserver 0.0.0.0:8000"
+                    
 
     ports:
       - '8000:8000'
-    stdin_open : true
-    tty: true
+      
+  
+    stdin_open: True
+    tty: True
     
     environment:
     - DEBUG=True      # Enable debug mode for Django hot-reloading
@@ -37,5 +40,29 @@ services:
       - db_data:/app/ems/db.sqlite3 # volume mount , ls -> backend(contains all files ) , ems(db.sqlite3)
       
       # Named volumes (like db_data in your configuration) are not tied to a specific folder on the host. They are stored and managed by Docker, typically in /var/lib/docker/volumes/ on Linux systems. 
+    depends_on:
+      - redis
+    links:
+      - "redis"
+
+  daphne:
+    build:
+      context: ./ems
+      dockerfile: Dockerfile
+    command: bash -c "watchmedo auto-restart --patterns='*.py' --recursive -- daphne -b 0.0.0.0 -p 8001 ems.asgi:application -v 3"
+#bash -c "daphne -b 0.0.0.0 -p 8001 ems.asgi:application -v 3" 
+    ports:
+      - "8001:8001"
+    depends_on:
+      - backend
+    volumes:
+      - ./ems:/app/backend
+      - db_data:/app/ems/db.sqlite3
+
+  redis:
+      image: redislabs/redismod
+      container_name: redis
+      ports:
+        - "6379:6379"
 volumes:
   db_data:
