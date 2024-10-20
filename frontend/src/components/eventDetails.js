@@ -6,7 +6,7 @@ const EventDetail = () => {
     const [event, setEvent] = useState(null);
 
     useEffect(() => {
-        fetch(`http://localhost:8000/api/events/${id}/`)
+        fetch(`http://localhost:8000/events/api/events/${id}/`)
             .then(response => response.json())
             .then(data => setEvent(data))
             .catch(error => console.error('Error fetching event:', error));
@@ -16,10 +16,10 @@ const EventDetail = () => {
 
     return (
         <div>
-            <h1>{event.title}</h1>
-            <p>{event.description}</p>
-            <p>Date: {event.date}</p>
-            <p>Location: {event.location}</p>
+            <h1>Event Name : {event.title}</h1>
+            <p>description : {event.description}</p>
+            <p> Event Starting from : {event.start_time}</p>
+            <p> Event ending : {event.end_time}</p>
         </div>
     );
 };

@@ -58,6 +58,8 @@ services:
     volumes:
       - ./ems:/app/backend
       - db_data:/app/ems/db.sqlite3
+    environment:
+      - DJANGO_SETTINGS_MODULE=ems.settings
 
   redis:
       image: redislabs/redismod

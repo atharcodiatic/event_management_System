@@ -17,6 +17,7 @@ from channels.security.websocket import AllowedHostsOriginValidator
 from notification import routing  # Import your routing
 import notification
 
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ems.settings')
 
 application = ProtocolTypeRouter({

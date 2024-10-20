@@ -9,4 +9,9 @@ from .utility import send_reminder_email
 class NotificationViewSet(viewsets.ModelViewSet):
     queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
+    
+    def get_queryset(self):
+        query_set =  super().get_queryset()
+        return query_set.filter(is_read=False)
+        
 

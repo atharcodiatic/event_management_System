@@ -2,7 +2,7 @@ FROM python:3
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
-
+ENV DJANGO_SETTINGS_MODULE=ems.settings
 WORKDIR /app/backend
 
 COPY requirements.txt /app/backend/
